@@ -3,40 +3,45 @@
      <body>
           <div class="row mt-3">
                <div class="col-8 offset-2">
-                    <form method="POST" action="/listings/<%=listing._id%>?_method=PUT">
+                    <form method="POST" action="/listings/<%=listing._id%>?_method=PUT" class="needs-validation" novalidate>
                          <h2>Edit a Listing</h2>
                          <div>
                               <label for="title" class="form-label">Title</label>
-                              <input type="text" class="form-control" value="<%=listing.title%>" name="listing[title]">
+                              <input type="text" class="form-control" value="<%=listing.title%>" name="listing[title]" required>
+                               <div class="valid-feedback">Title looks Good</div>
                          </div>
                          <br>
                          <div><label for="description" class="form-label">Description</label>
                               <textarea class="form-control"
-                                   name="listing[description]"><%=listing.description%></textarea>
+                                   name="listing[description]" required><%=listing.description%></textarea>
+                                     <div class="invalid-feedback">Please enter the Short description</div>
                          </div>
                          <br>
                          <div><label for="image" class="form-label">Image</label>
                               <input class="form-control" type="text" value="<%=listing.image.url%>"
-                                   name="listing[image.url]">
+                                   name="listing[image.url]" required>
                          </div>
                         <br>
                          <div class="row">
                               <div class="col-md-4">
                                    <label for="price" class="form-label">Price</label>
                                    <input class="form-control" name="listing[price]" value="<%=listing.price%>"
-                                        type="number">
+                                        type="number" required>
+                                         <div class="invalid-feedback">Price should be valid</div>
                               </div>
                               <div class="col-md-8">
                                    <div><label for="country" class="form-label">Country</label>
                                         <input type="text" class="form-control" value="<%=listing.country%>"
-                                             name="listing[country]">
+                                             name="listing[country]" required>
+                                             <div class="invalid-feedback">Please enter the country name</div>
                                    </div>
                               </div>
                          </div>
                          <br>
                          <div><label for="location" class="form-label">Location</label>
                               <input class="form-control" type="text" value="<%=listing.location%>"
-                                   name="listing[location]">
+                                   name="listing[location]" required>
+                                    <div class="invalid-feedback">Please enter the Location</div>
                          </div>
                          <br>
                          <button class="btn btn-dark mt-3 edit-btn">Edit</button>
