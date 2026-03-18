@@ -15,9 +15,11 @@ const { listingSchema ,reviewSchema } = require("./schema.js");
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/reviews.js");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const flash = require("connect-flash");
 const port = 8080;
 
-app.use(cookieParser);
+
 
 
 async function connectDB() {
@@ -33,6 +35,8 @@ connectDB()
     });
 
 
+
+app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.json());
@@ -45,6 +49,25 @@ app.engine("ejs", ejsMate);
 //app.use(express.static(path.join(__dirname, "/public")));
 
 
+const sessionOptions = {
+    secret: "mysupersecretcode",
+    resave: false,
+    saveUninitialized :true,
+    cookie:{
+        expires: Date.now()+7*24*60*60*1000,
+        maxAge: 7*24*60*60*1000,  
+        httpOnly:true, 
+    }
+};
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use((req,res,next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+});
 
 app.get("/", (req, res) => {
     res.send("I am root");
@@ -53,28 +76,28 @@ app.get("/", (req, res) => {
 
 
 
-const validateListing = async (req, res,next) => {
-    let { error } = await listingSchema.validate(req.body);
-    // console.log(result);
-    if (error) {
-        let errMsg = error.details.map((el)=> el.message).join(",");
-        throw new ExpressError(400,errMsg);
-    } else {
-        next();
-    }
-}
+// const validateListing = async (req, res,next) => {
+//     let { error } = await listingSchema.validate(req.body);
+//     // console.log(result);
+//     if (error) {
+//         let errMsg = error.details.map((el)=> el.message).join(",");
+//         throw new ExpressError(400,errMsg);
+//     } else {
+//         next();
+//     }
+// }
 
 
-const validateReview = async (req, res,next) => {
-    let { error } = await reviewSchema.validate(req.body);
-    // console.log(result);
-    if (error) {
-        let errMsg = error.details.map((el)=> el.message).join(",");
-        throw new ExpressError(400,errMsg);
-    } else {
-        next();
-    }
-}
+// const validateReview = async (req, res,next) => {
+//     let { error } = await reviewSchema.validate(req.body);
+//     // console.log(result);
+//     if (error) {
+//         let errMsg = error.details.map((el)=> el.message).join(",");
+//         throw new ExpressError(400,errMsg);
+//     } else {
+//         next();
+//     }
+// }
 
 
 
