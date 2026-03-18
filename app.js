@@ -12,7 +12,12 @@ const url = process.env.MONGO_URL;
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema ,reviewSchema } = require("./schema.js");
+const listings = require("./routes/listing.js");
+const reviews = require("./routes/reviews.js");
+const cookieParser = require("cookie-parser");
 const port = 8080;
+
+app.use(cookieParser);
 
 
 async function connectDB() {
@@ -74,94 +79,95 @@ const validateReview = async (req, res,next) => {
 
 
 
+app.use("/listings",listings);
+app.use("/listings/:id/reviews",reviews);
 
 
 
 
 
+// app.get("/listings", wrapAsync(async (req, res) => {
+//     let listings = await Listing.find({});
+//     res.render("listings/index.ejs", { listings });
+// }));
 
-app.get("/listings", wrapAsync(async (req, res) => {
-    let listings = await Listing.find({});
-    res.render("listings/index.ejs", { listings });
-}));
-
-app.get("/listings/new", (req, res) => {
-    res.render("listings/new.ejs");
-});
-
-
-//show route
-app.get("/listings/:id", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let listing = await Listing.findById(id).populate("reviews");
-    res.render("listings/show.ejs", { listing });
-}));
+// app.get("/listings/new", (req, res) => {
+//     res.render("listings/new.ejs");
+// });
 
 
-//Create route
-app.post("/listings",
-    validateListing,
-    wrapAsync(async (req, res, next) => {
-        const newListing = new Listing(req.body.listing);
-        await newListing.save();
-        console.log(req.body.listing);
-        res.redirect("/listings");
-    }));
+// //show route
+// app.get("/listings/:id", wrapAsync(async (req, res) => {
+//     let { id } = req.params;
+//     let listing = await Listing.findById(id).populate("reviews");
+//     res.render("listings/show.ejs", { listing });
+// }));
 
 
-//Edit Route
-app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let listing = await Listing.findById(id);
-    res.render("listings/edit.ejs", { listing });
-}));
-
-//Update Route
-app.put("/listings/:id", 
-    validateListing,
-    wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-    res.redirect(`/listings/${id}`);
-}));
+// //Create route
+// app.post("/listings",
+//     validateListing,
+//     wrapAsync(async (req, res, next) => {
+//         const newListing = new Listing(req.body.listing);
+//         await newListing.save();
+//         console.log(req.body.listing);
+//         res.redirect("/listings");
+//     }));
 
 
-//Delete Route
-app.delete("/listings/:id", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
-    res.redirect("/listings");
-}));
+// //Edit Route
+// app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
+//     let { id } = req.params;
+//     let listing = await Listing.findById(id);
+//     res.render("listings/edit.ejs", { listing });
+// }));
 
+// //Update Route
+// app.put("/listings/:id", 
+//     validateListing,
+//     wrapAsync(async (req, res) => {
+//     let { id } = req.params;
+//     await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+//     res.redirect(`/listings/${id}`);
+// }));
+
+
+// //Delete Route
+// app.delete("/listings/:id", wrapAsync(async (req, res) => {
+//     let { id } = req.params;
+//     let deletedListing = await Listing.findByIdAndDelete(id);
+//     console.log(deletedListing);
+//     res.redirect("/listings");
+// }));
 
 
 
-//Reviews 
-//POST Route
 
-app.post("/listings/:id/reviews",validateReview,wrapAsync(async(req,res)=>{
-      let { id } = req.params;
-      let listing  = await Listing.findById(id);
-      let newReview = new Review(req.body.review);
+// //Reviews 
+// //POST Route
 
-      listing.reviews.push(newReview._id);
-      await newReview.save();
-      await listing.save();
+// app.post("/listings/:id/reviews",validateReview,wrapAsync(async(req,res)=>{
+//       let { id } = req.params;
+//       let listing  = await Listing.findById(id);
+//       let newReview = new Review(req.body.review);
 
-      res.redirect(`/listings/${listing._id}`);
+//       listing.reviews.push(newReview._id);
+//       await newReview.save();
+//       await listing.save();
 
-      }));
+//       res.redirect(`/listings/${listing._id}`);
 
- //DELETE Review route
+//       }));
+
+//  //DELETE Review route
  
-app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async(req,res)=>{
-    let { id , reviewId } = req.params;
-    await Listing.findByIdAndUpdate(id, {$pull:{reviews :reviewId}});
-    await Review.findByIdAndDelete(reviewId);
+// app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async(req,res)=>{
+//     let { id , reviewId } = req.params;
+//     await Listing.findByIdAndUpdate(id, {$pull:{reviews :reviewId}});
+//     await Review.findByIdAndDelete(reviewId);
 
-    res.redirect(`/listings/${id}`);
-})); 
+//     res.redirect(`/listings/${id}`);
+// })); 
  
 
 

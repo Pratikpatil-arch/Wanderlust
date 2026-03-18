@@ -5,14 +5,13 @@ module.exports.listingSchema = Joi.object({
         title: Joi.string().required(),
         description: Joi.string().required(),
         location: Joi.string().required(),
-        price: Joi.number().required().min(0),
+        price: Joi.number().min(0).required(),
         country: Joi.string().required(),
         image: Joi.object({
-            url: Joi.string().allow("", null)
-        }).allow("", null) // Allow the whole image object to be empty if needed
+            url: Joi.string().allow("", null).required()
+        }).required()
     }).required(),
 });
-
 
 module.exports.reviewSchema = Joi.object({
     review:Joi.object({
