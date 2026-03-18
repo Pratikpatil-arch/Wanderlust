@@ -12,13 +12,18 @@ const url = process.env.MONGO_URL;
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema ,reviewSchema } = require("./schema.js");
-const listings = require("./routes/listing.js");
-const reviews = require("./routes/reviews.js");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
 const port = 8080;
 
+
+const userRouter = require("./routes/user.js");
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/reviews.js");
 
 
 
@@ -63,6 +68,14 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req,res,next)=>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
@@ -73,7 +86,15 @@ app.get("/", (req, res) => {
     res.send("I am root");
 });
 
+// app.get("/demoUser",async(req,res)=>{
+//   let fakeuser = new User({
+//         email : "student@gmail.com",
+//         username:"delta-student",
+//   });
 
+//   let registeredUser = await User.register(fakeuser,"helloWorld");
+//   res.send(registeredUser);
+// });
 
 
 // const validateListing = async (req, res,next) => {
@@ -102,8 +123,9 @@ app.get("/", (req, res) => {
 
 
 
-app.use("/listings",listings);
-app.use("/listings/:id/reviews",reviews);
+app.use("/listings",listingRouter);
+app.use("/listings/:id/reviews",reviewRouter);
+app.use("/",userRouter);
 
 
 
