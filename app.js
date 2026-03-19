@@ -79,12 +79,25 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req,res,next)=>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
     next();
 });
 
 app.get("/", (req, res) => {
     res.send("I am root");
 });
+
+// app.get("/insertOwner", async (req, res) => {
+//     await Listing.deleteMany({});
+//     data.data = data.data.map((obj)=>({
+//         ...obj,
+//         owner: "69bb0483247bca8e7a55a454"
+//     }));
+//     await Listing.insertMany(data.data);
+
+//     console.log("data was initialized");
+//     res.send("Database initialized successfully"); // ✅ response added
+// });
 
 // app.get("/demoUser",async(req,res)=>{
 //   let fakeuser = new User({
