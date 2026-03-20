@@ -24,8 +24,8 @@ router.route("/")
     .get(wrapAsync(listingController.index))  //index Route
     .post(
         isLoggedin,
-        validateListing,
         upload.single("listing[image][url]"),
+        validateListing,
         wrapAsync(listingController.createListing)
     );
 
@@ -38,6 +38,7 @@ router.route("/:id")
     .put(                                                  //Update Route
         isLoggedin,
         isOwner,
+        upload.single("listing[image][url]"),
         validateListing,
         wrapAsync(listingController.updateListing))
     .delete(isLoggedin, isOwner, wrapAsync(listingController.destroyListing));   //Delete Route
