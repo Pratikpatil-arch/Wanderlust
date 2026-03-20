@@ -2,6 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const dns = require("dns");
+dns.setServers([
+    '1.1.1.1',
+    '8.8.8.8',
+]);
 const Listing = require("./models/Listing");
 const Review = require("./models/review.js");
 const data = require("./init/data");

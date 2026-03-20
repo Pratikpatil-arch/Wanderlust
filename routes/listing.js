@@ -11,8 +11,10 @@ const { isLoggedin, isOwner, validateListing } = require("../middleware.js");
 
 const listingController = require("../controllers/listings.js");
 
-const multer= require("multer");
-const upload = multer({dest:"uploads/"});
+
+const multer = require("multer");
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
 
 
 
@@ -20,29 +22,25 @@ const upload = multer({dest:"uploads/"});
 
 router.route("/")
     .get(wrapAsync(listingController.index))  //index Route
-    // .post(                                    //Create Route
-    //     isLoggedin,
-    //     validateListing,
-    //     wrapAsync(listingController.createListing));
-    .post((req,res)=>{
-        res.send(req.body);
-    })
-    // .post(upload.single("listing[image][url]"),(req,res)=>{
-    //     res.send(req.file);
-    // })
+    .post(
+        isLoggedin,
+        validateListing,
+        upload.single("listing[image][url]"),
+        wrapAsync(listingController.createListing)
+    );
 
 
 //New Route
 router.get("/new", isLoggedin, listingController.renderNewForm);
 
 router.route("/:id")
-    .get( wrapAsync(listingController.showListing))   //show route
+    .get(wrapAsync(listingController.showListing))   //show route
     .put(                                                  //Update Route
         isLoggedin,
         isOwner,
         validateListing,
         wrapAsync(listingController.updateListing))
-    .delete( isLoggedin, isOwner, wrapAsync(listingController.destroyListing));   //Delete Route
+    .delete(isLoggedin, isOwner, wrapAsync(listingController.destroyListing));   //Delete Route
 
 
 
