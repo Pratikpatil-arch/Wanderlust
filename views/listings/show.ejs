@@ -8,7 +8,7 @@
         </div>
 
         <div class="card col-6 offset-3 show-card listing-card">
-         <img src="<%=listing.image.url%>" class="card-img-top show-img" alt="listing-image" /> 
+            <img src="<%=listing.image.url%>" class="card-img-top show-img" alt="listing-image" />
             <div class="card-body">
                 <p class="card-text">
                 <p>Owned by <i>
@@ -44,22 +44,22 @@
                     <label for="rating" class="form-label">Rating</label>
                     <input type="range" class="form-range" min="1" max="5" id="rating" name="review[rating]">
                 </div> -->
-                 <div class="mb-3 mt-3">
+                <div class="mb-3 mt-3">
                     <label for="rating" class="form-label">Rating</label>
-                <fieldset class="starability-slot">
-                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
-                        aria-label="No rating." />
-                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                    <label for="first-rate1" title="Terrible">1 star</label>
-                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                    <label for="first-rate2" title="Not good">2 stars</label>
-                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                    <label for="first-rate3" title="Average">3 stars</label>
-                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                    <label for="first-rate4" title="Very good">4 stars</label>
-                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                    <label for="first-rate5" title="Amazing">5 stars</label>
-                </fieldset>
+                    <fieldset class="starability-slot">
+                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
+                            aria-label="No rating." />
+                        <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                        <label for="first-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                        <label for="first-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                        <label for="first-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                        <label for="first-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                        <label for="first-rate5" title="Amazing">5 stars</label>
+                    </fieldset>
                 </div>
                 <div class="mb-3 mt-3">
                     <label for="comment" class="form-label">Comments</label>
@@ -78,7 +78,8 @@
                 <% for(let review of listing.reviews){%>
                     <div class="card col-5 mb-3 mb-3 mx-2">
                         <div class="card-body">
-                            <h5 class=".card-title">@<%= review.author.username %> </h5>
+                            <h5 class=".card-title">@<%= review.author.username %>
+                            </h5>
                             <p class="starability-result card-text" data-rating="<%=review.rating%>"> </p>
                             <p class="card-text">
                                 <%=review.comment%>
@@ -93,4 +94,21 @@
             </div>
         </div>
 
+        <div class="col-md-6 mx-auto mb-4">
+            <main role="main" aria-label="Map Container">
+                <div id="map"></div>
+            </main>
+        </div>
     </div>
+
+
+    <script>
+        // Step 1: Setup API Key and AWS Region
+        const API_KEY = "<%=AWS_KEY%>";
+        const AWS_REGION = "<%=AWS_REGION%>";
+    </script>
+    <script>
+        const listing = <%-JSON.stringify(listing)%>; // [lng, lat]
+        console.log(listing);
+    </script>
+    <script src="/js/map.js"></script>

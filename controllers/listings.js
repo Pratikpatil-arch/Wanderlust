@@ -1,4 +1,5 @@
 const Listing = require("../models/Listing");
+const { geocodePlace } = require("../utils/GeoCoding");
 
 
 
@@ -26,16 +27,21 @@ module.exports.showListing = async (req, res) => {
         req.flash("error", "Listing you requested for does not exist!");
         return res.redirect("/listings");
     }
-    res.render("listings/show.ejs", { listing });
+    res.render("listings/show.ejs", { listing ,AWS_KEY:process.env.ALS_KEY,AWS_REGION:process.env.AWS_REGION});
 };
 
 module.exports.createListing = async (req, res, next) => {
+    
+    const geometry = await geocodePlace(req.body.listing.location);
+
     let url = req.file.path;
     let filename = req.file.filename;
     const newListing = new Listing(req.body.listing);
     newListing.owner = req.user._id;
     newListing.image = { filename, url };
-    await newListing.save();
+    newListing.geometry = geometry;
+    let savedListings = await newListing.save();
+    console.log(savedListings);
     req.flash("success", "New Listing Created");
     console.log(req.body.listing);
     res.redirect("/listings");
