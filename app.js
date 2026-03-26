@@ -88,9 +88,9 @@ app.use((req,res,next)=>{
     next();
 });
 
-app.get("/", (req, res) => {
-    res.send("I am root");
-});
+// app.get("/", (req, res) => {
+//     res.send("I am root");
+// });
 
 // app.get("/insertOwner", async (req, res) => {
 //     await Listing.deleteMany({});
