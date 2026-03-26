@@ -9,7 +9,7 @@ dns.setServers([
 ]);
 const Listing = require("./models/Listing");
 const Review = require("./models/review.js");
-const data = require("./init/data");
+// const data = require("./init/data");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-Mate");
