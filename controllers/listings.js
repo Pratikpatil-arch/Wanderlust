@@ -27,7 +27,7 @@ module.exports.showListing = async (req, res) => {
         req.flash("error", "Listing you requested for does not exist!");
         return res.redirect("/listings");
     }
-    res.render("listings/show.ejs", { listing ,AWS_KEY:process.env.ALS_KEY,AWS_REGION:process.env.AWS_REGION});
+    res.render("listings/show.ejs", { listing ,currentUser: req.user,AWS_KEY:process.env.ALS_KEY,AWS_REGION:process.env.AWS_REGION});
 };
 
 module.exports.createListing = async (req, res, next) => {
