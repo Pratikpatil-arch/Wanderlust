@@ -60,7 +60,7 @@ app.engine("ejs", ejsMate);
 
 
 const sessionOptions = {
-    secret: "mysupersecretcode",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized :true,
     cookie:{
