@@ -1,57 +1,246 @@
 <%- layout("/layouts/boilerplate")%>
 
-     <div class="row">
-          <div class="col-8 offset-2">
-               <form method="POST" action="/listings" class="needs-validation" enctype="multipart/form-data" novalidate>
-                    <h2>Create a new Listing</h2>
-                    <br>
-                    <div>
-                         <label for="title" class="form-label">Title</label>
-                         <input type="text" placeholder="Add a catchy title" name="listing[title]" class="form-control"
-                              required >
-                         <div class="valid-feedback">Title looks Good</div>
-                         <br>
-                         </div>
-                         <div>
-                              <label for="description" class="form-label">Description</label>
-                              <textarea class="form-control" name="listing[description]" required></textarea>
-                                <div class="invalid-feedback">Please enter the Short description</div>
-                         </div>
-                         <br>
-                          <div>
-                              <label for="image" class="form-label">Upload Listing Image</label>
-                              <input type="file" class="form-control" 
-                                   name="listing[image][url]" required>
-                         </div>
-                         <br>
-                         <div class="row">
-                              <div class="col-md-4">
-                                   <label for="price" class="form-label">Price</label>
-                                   <input name="listing[price]" type="number" class="form-control" placeholder="1200" 
-                                        required>
-                                        <div class="invalid-feedback">Price should be valid</div>
+<style>
+    .form-wrapper{
+        display:flex;
+        justify-content:center;
+        padding:2.5rem 1rem;
+        margin-bottom:5rem;
+    }
 
-                              </div>
-                              <br>
-                              <div class="col-md-8">
-                                   <label for="country" class="form-label">Country</label>
-                                   <input type="text" class="form-control" placeholder="India" name="listing[country]"
-                                        required>
-                                  <div class="invalid-feedback">Please enter the country name</div>
-                              </div>
-                         </div>
-                         <br>
-                         <div>
-                              <label for="location" class="form-label">Location</label>
-                              <input type="text" class="form-control" placeholder="Mumbai" name="listing[location]"
-                                   required>
-                                    <div class="invalid-feedback">Please enter the Location</div>
+    .listing-form-card{
+        width:100%;
+        max-width:700px;
+        background-color:#fff;
+        border:1px solid #dddddd;
+        border-radius:1.25rem;
+        padding:2.5rem 2.5rem;
+        box-shadow:0 6px 20px rgba(0,0,0,0.08);
+        overflow:hidden;
+    }
 
-                         </div>
-                         <br>
+    /* Full-width hero banner behind the heading, all screen sizes */
+    .form-hero{
+        margin:-2.5rem -2.5rem 2rem -2.5rem;
+        height:220px;
+        background-image:linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+            url('https://images.pexels.com/photos/31974125/pexels-photo-31974125.jpeg');
+        background-size:cover;
+        background-position:center;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        text-align:center;
+        padding:1rem;
+    }
 
-                         <button class="btn btn-dark add-btn">Add</button>
+    .form-hero h2{
+        color:#fff;
+        margin-bottom:0.4rem;
+        font-size:1.7rem;
+        font-weight:700;
+    }
 
-               </form>
-          </div>
-     </div>
+    .form-hero p{
+        color:#f0f0f0;
+        margin-bottom:0;
+        font-size:0.95rem;
+    }
+
+    .listing-form-card .form-label{
+        font-weight:600;
+        font-size:0.9rem;
+        margin-bottom:0.3rem;
+    }
+
+    .listing-form-card .form-control,
+    .listing-form-card .form-select{
+        border-radius:0.6rem;
+        padding:0.6rem 0.9rem;
+        border:1px solid #b0b0b0;
+    }
+
+    .listing-form-card .form-control:focus,
+    .listing-form-card .form-select:focus{
+        border-color:#ff385c;
+        box-shadow:0 0 0 1px #ff385c;
+    }
+
+    .listing-form-card textarea.form-control{
+        min-height:100px;
+    }
+
+    .field-group{
+        margin-bottom:1.4rem;
+    }
+
+    /* Cancel + Add row */
+    .form-actions{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-top:0.5rem;
+        gap:1rem;
+    }
+
+    .cancel-btn{
+        background-color:#fff;
+        color:#222222;
+        border:1px solid #b0b0b0 !important;
+        border-radius:0.6rem;
+        padding:0.75rem 1.5rem;
+        font-weight:600;
+        text-decoration:none;
+    }
+
+    .cancel-btn:hover{
+     background-color:#222222;
+     color:white;
+    }
+
+    .add-btn{
+        background-color:#ff385c !important;
+        color:#fff;
+        border:none !important;
+        border-radius:0.6rem;
+        padding:0.75rem 1.5rem;
+        font-weight:600;
+    }
+
+    .add-btn:hover{
+        background-color:#e31c5f !important;
+        color:#fff;
+    }
+
+    /* Responsiveness for common mobile widths (~360px - 428px) */
+    @media (max-width: 576px){
+        .form-wrapper{
+            padding:1rem 0.75rem;
+        }
+
+        .listing-form-card{
+            max-width:100%;
+            padding:1.5rem 1.25rem;
+            border-radius:0.85rem;
+            box-shadow:0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        /* Negative margins matched to this breakpoint's own card padding,
+           so the banner still reaches the card's edges on mobile */
+        .form-hero{
+            margin:-1.5rem -1.25rem 1.5rem -1.25rem;
+            height:140px;
+        }
+
+        .form-hero h2{
+            font-size:1.25rem;
+        }
+
+        .form-hero p{
+            font-size:0.8rem;
+        }
+
+        .field-group{
+            margin-bottom:1rem;
+        }
+
+        .listing-form-card .form-label{
+            font-size:0.82rem;
+        }
+
+        .listing-form-card .form-control,
+        .listing-form-card .form-select{
+            padding:0.5rem 0.75rem;
+            font-size:0.88rem;
+        }
+
+        .form-actions{
+            flex-direction:row;
+        }
+
+        .cancel-btn,
+        .add-btn{
+            flex:1;
+            text-align:center;
+            padding:0.6rem;
+            font-size:0.88rem;
+        }
+    }
+</style>
+
+<div class="form-wrapper">
+    <div class="listing-form-card">
+        <form method="POST" action="/listings" class="needs-validation" enctype="multipart/form-data" novalidate>
+
+            <!-- Hero banner: all screen sizes -->
+            <div class="form-hero">
+                <h2>Create a new listing</h2>
+                <p>Share your space with travelers around the world</p>
+            </div>
+
+            <div class="field-group">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" id="title" placeholder="Add a catchy title" name="listing[title]" class="form-control" required>
+                <div class="valid-feedback">Title looks good!</div>
+                <div class="invalid-feedback">Please enter a title</div>
+            </div>
+
+            <div class="field-group">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="listing[description]" required></textarea>
+                <div class="invalid-feedback">Please enter a short description</div>
+            </div>
+
+            <div class="field-group">
+                <label for="image" class="form-label">Upload listing image</label>
+                <input type="file" class="form-control" id="image" name="listing[image][url]" required>
+                <div class="invalid-feedback">Please upload an image</div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 field-group">
+                    <label for="price" class="form-label">Price</label>
+                    <input name="listing[price]" id="price" type="number" class="form-control" placeholder="1200" required>
+                    <div class="invalid-feedback">Price should be valid</div>
+                </div>
+
+                <div class="col-md-8 field-group">
+                    <label for="country" class="form-label">Country</label>
+                    <input type="text" class="form-control" id="country" placeholder="India" name="listing[country]" required>
+                    <div class="invalid-feedback">Please enter the country name</div>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" class="form-control" id="location" placeholder="Mumbai" name="listing[location]" required>
+                <div class="invalid-feedback">Please enter the location</div>
+            </div>
+
+            <div class="field-group">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" id="category" name="listing[category]" required>
+                    <option value="" disabled selected>Select a category</option>
+                    <option value="trending">Trending</option>
+                    <option value="rooms">Rooms</option>
+                    <option value="iconic-cities">Iconic Cities</option>
+                    <option value="mountains">Mountains</option>
+                    <option value="castles">Castles</option>
+                    <option value="pools">Amazing Pools</option>
+                    <option value="camping">Camping</option>
+                    <option value="farms">Farms</option>
+                    <option value="arctic">Arctic</option>
+                    <option value="domes">Domes</option>
+                    <option value="boats">Boats</option>
+                </select>
+                <div class="invalid-feedback">Please select a category</div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/listings" class="btn btn-dark cancel-btn">Cancel</a>
+                <button class="btn add-btn">Add listing</button>
+            </div>
+        </form>
+    </div>
+</div>

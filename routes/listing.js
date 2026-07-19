@@ -30,6 +30,9 @@ router.route("/")
     );
 
 
+//Search Route
+router.get("/search", wrapAsync(listingController.searchListings));
+
 //New Route
 router.get("/new", isLoggedin, listingController.renderNewForm);
 

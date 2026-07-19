@@ -6,24 +6,31 @@ body, html {
     height: 100%; 
 }
 
-/* Set map to full screen */
-#map { 
-    width:800px; 
-    height:400px;
-    display:flex;
-    justify-self:center; 
-    margin-top:140px;
+.red-marker {
+    width: 18px;
+    height: 18px;
+    background: #ff385c;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(0,0,0,0.4);
 }
 
-/* Style for popup content */
-.popup-content {
-    max-width: 200px; /* Set max width for responsiveness */
-    padding: 8px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    font-size: 14px;
-    position: relative;
-    transition: background-color 0.3s ease;
+.custom-marker {
+    background: transparent;
+    border: none;
+}
+
+.custom-marker i {
+    font-size: 36px;
+    color: #ff385c;      /* Airbnb red */
+    text-shadow: 0 2px 6px rgba(0,0,0,0.35);
+}
+
+#map {
+    width: 800px;
+    height: 400px;
+    margin: 50px auto;
+    border-radius: 10px;
 }
 
 /* Style for copy button */
@@ -39,52 +46,13 @@ body, html {
     visibility: hidden; /* Use visibility instead */
 }
 
-.maplibregl-ctrl-geocoder {
-    min-width: 400px; /* Set your desired minimum width */
-}
 
-.maplibregl-popup-content {
-    min-width: 200px; /* Set your desired minimum width */
-}
 
-/* Change background color and show copy button on hover */
-.popup-content:hover .copy-button {
-    visibility: visible; /* Show button without layout shift */
-    background-color: #e3f2fd;
-}
 
-/* Badge style for popup content. Used for displaying additional information in popup content */
-.badge {
-    position: absolute;
-    padding-left: 5px;
-    padding-right: 5px;
-    top: 5px;
-    left: 5px;
-    border-radius: 4px;
-    font-size: 12px;
-}
+
+
 
 /* Unique colors for each category */
-
-.country {
-  background-color: #FFB3BA; 
-  color: #444; 
-}
-
-.region {
-  background-color: #FFCCAA; 
-  color: #333; 
-}
-
-.subregion {
-  background-color: #FFE4B5; 
-  color: #222; 
-}
-
-.locality {
-  background-color: #FFFACD; 
-  color: #222; 
-}
 
 .district {
   background-color: #FAEBD7; 

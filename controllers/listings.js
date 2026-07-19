@@ -5,8 +5,14 @@ const { geocodePlace } = require("../utils/GeoCoding");
 
 
 module.exports.index = async (req, res) => {
-    let listings = await Listing.find({});
-    res.render("listings/index.ejs", { listings });
+    let { category } = req.query;
+    let filter = {};
+    if (category) {
+        filter.category = category;
+    }
+    let listings = await Listing.find(filter);
+    // res.render("listings/index.ejs", { listings });
+    res.render("listings/index.ejs", { listings, category: category || null });
 };
 
 module.exports.renderNewForm = async (req, res) => {
@@ -27,7 +33,7 @@ module.exports.showListing = async (req, res) => {
         req.flash("error", "Listing you requested for does not exist!");
         return res.redirect("/listings");
     }
-    res.render("listings/show.ejs", { listing ,currentUser: req.user,AWS_KEY:process.env.ALS_KEY,AWS_REGION:process.env.AWS_REGION});
+    res.render("listings/show.ejs", { listing ,currentUser: req.user});
 };
 
 module.exports.createListing = async (req, res, next) => {
@@ -79,4 +85,23 @@ module.exports.destroyListing = async (req, res) => {
     req.flash("success", "Listing Deleted");
     console.log(deletedListing);
     res.redirect("/listings");
+};
+
+module.exports.searchListings = async (req, res) => {
+    let { q } = req.query;
+    if (!q || q.trim() === "") {
+        req.flash("error", "Please enter a location or country to search");
+        return res.redirect("/listings");
+    }
+    let listings = await Listing.find({
+        $or: [
+            { location: { $regex: q, $options: "i" } },
+            { country: { $regex: q, $options: "i" } },
+        ],
+    });
+    if (listings.length === 0) {
+        req.flash("error", `No listings found for "${q}"`);
+        return res.redirect("/listings");
+    }
+    res.render("listings/index.ejs", { listings, searchQuery: q.trim() });
 };

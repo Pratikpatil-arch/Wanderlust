@@ -34,6 +34,11 @@ const listingSchema = new mongoose.Schema({
     country: {
         type: String,
     },
+    category: {
+        type: String,
+        enum: ["trending", "rooms", "iconic-cities", "mountains", "castles", "pools", "camping", "farms", "arctic", "domes", "boats"],
+        required: true,
+    },
     reviews:[
         {
             type:mongoose.Schema.Types.ObjectId,
