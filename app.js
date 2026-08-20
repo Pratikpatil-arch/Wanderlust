@@ -32,17 +32,49 @@ const reviewRouter = require("./routes/reviews.js");
 
 
 
-async function connectDB() {
-    await mongoose.connect(url);
+// async function connectDB() {
+//     await mongoose.connect(url);
+// }
+
+// connectDB()
+//     .then(() => {
+//         console.log("Database connected successfully");
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
+
+let isConnected = false;
+
+async function connectToMongo() {
+  if (isConnected) {
+    return;
+  }
+
+  try {
+    await mongoose.connect(process.env.MONGO_URL, {
+      family: 4
+    });
+
+    isConnected = true;
+    console.log("MongoDB is connected successfully");
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    throw err;
+  }
 }
 
-connectDB()
-    .then(() => {
-        console.log("Database connected successfully");
-    })
-    .catch((err) => {
-        console.log(err);
+app.use(async (req, res, next) => {
+  try {
+    await connectToMongo();
+    next();
+  } catch (err) {
+    res.status(500).json({
+      message: "Database connection failed"
     });
+  }
+});
+
 
 
 
@@ -261,9 +293,11 @@ app.use((err, req, res, next) => {
 
 
 
-app.listen(port, (req, res) => {
-    console.log(`Server is running on port ${port}`);
-});
+// app.listen(port, (req, res) => {
+//     console.log(`Server is running on port ${port}`);
+// });
+
+module.exports = app;
 
 
 // app.get("/data",async(req,res)=>{
